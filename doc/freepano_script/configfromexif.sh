@@ -1,5 +1,6 @@
 #!/bin/bash
 # configfromexif.sh
+# To work please copy into the bin forlder of the freepano project
 usage() {
   echo 'usage: configfromexif  <Website Folder> <Input Folder with Images>'
   exit 1
