@@ -1,0 +1,44 @@
+For the scripts to work they need to be placed in the python folder of https://github.com/mapillary/mapillary_tools
+
+The Script dependencies:
+
+‣By Mapillary scripts:
+•python2
+•python-exifread
+•gpxpy
+•PIL
+•pyexiv2
+
+‣By my bash scripts:
+•exiftool(perl-image-exiftool)
+•ImageMagick
+•(have to be placed in the python directory of Mapillard_tools)
+
+AddSphereXMP.sh creates XMP tags from present exif tags needed by mapillary for panoramas
+copygpstime.sh copies gps time data to exif original time data needed bd mapillary script
+upload.sh reduces size adds needed metadata with the other scripts and uplaods to mapillary
+
+Detailed Explenation:
+Mappillary requires username, email and password or username, hash and securityhash to be set   
+as envirement variable for uploads depending on the tool used
+
+Some mapillary tools works only on .jpg (not on .jpeg)
+
+Mapillary needs its own sets of tags writen into the description tag of the image:
+
+`{"MAPSequenceUUID": "a57da8e1-0c9b-4b40-8969-1cad5fce8e4a", "MAPSettingsEmail": "email@domain.cdn", "MAPOrientation": 1, "MAPPhotoUUID": "a1b5b598-a762-447c-8ecd-565eef758da9", "MAPDeviceMake": "none", "MAPDeviceModel": "none", "MAPLongitude": 7.040963333333333, "MAPSettingsUsername": "username", "MAPCaptureTime": "2016_05_04_13_11_11_600", "MAPLatitude": 46.88145333333333, "MAPSettingsUploadHash": "someuploadhash", "MAPCompassHeading": {"TrueHeading": 61.89999999999998, "MagneticHeading": 61.89999999999998}}` 
+
+to create this Tag Mapillary puts the script add_mappillary_tag_from_exif.py at disposition.
+
+For it to work it needs:
+•the Gps data in the exif metadata, 
+•orientation metadata in exif (use interpolate_direction.py  to interpolate from gps from mapillary), 
+•date and time in the DateTimeOriginal and SubSecTimeOriginal tag Reading it from GPS data is not implemented yet,
+ So I wrote the script copygpstime.sh to create those tags from the gps metadata.
+
+For Panoramas Mapillary als needs photo sphere XMP Metadata, the script AddSphereXMP.sh adds the minimum 
+required fields defined by google and confirmed no further tag is needed from Mapillary.
+
+Wrote upload.sh script this will create all data needed and upload images, might overright some data if new 
+image sets will get some of this data before hand.
+
