@@ -1,0 +1,6 @@
+configfromexif.sh will created need data for freepane from exif, insert it in line 428 of js/main.js (so beware and 
+check if it still the write line before using and apply pyramide.sh for all pictueres in the folder
+Also needs some manual fixing for last and first picture for the arrows…
+Dependencies:
+Different bash tools 
+exiftool
