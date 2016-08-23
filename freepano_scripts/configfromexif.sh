@@ -21,7 +21,7 @@ echo //next serie > $wdir/out.txt
 declare -a files=("${@:2}"/*)
 for(( i= 0; i < ${#files[*]}; ++ i ))
 do
-
+echo -ne "$i/${#files[*]}\r"
 (cd $wdir ; $scdir/pyramid.sh -l 3 512 $pwd/${files[$i]})
 
  lat=$(exiftool -s3 -n -gpslatitude "${files[$i]}")
@@ -33,6 +33,51 @@ do
  nname=$(echo "$ndir" | sed -e 's/-[^ ]*$//' -e 's/^[^_]*\_//')
  pname=$(echo "$pdir" | sed -e 's/-[^ ]*$//' -e 's/^[^_]*\_//')
 mv $wdir/$dir/512/3 $1/panoramas/$dir
+
+if [[ $i == 0 ]] ; then
+ echo "     '$name': {
+            dirName: 'panoramas/$dir',
+            coords: {
+              lon: $lon,
+              lat: $lat,
+            },
+            arrow: {
+              list: {
+                0: {
+                  coords: {
+                    lon: -180,
+                    lat: -4
+                  },
+                  target: '$nname'
+                }
+              }
+            }
+          },
+">> $wdir/out.txt
+   else
+        if [[ $i == $(( ${#files[*]} - 1 )) ]]  ; then
+echo "     '$name': {
+            dirName: 'panoramas/$dir',
+            coords: {
+              lon: $lon,
+              lat: $lat,
+            },
+            arrow: {
+              list: {
+                0: {
+                  coords: {
+                    lon: -0,
+                    lat: -24
+                  },
+                  target: '$pname'
+                }
+              }
+            }
+          },
+
+">> $wdir/out.txt
+echo last
+        else
  echo "     '$name': {
             dirName: 'panoramas/$dir',
             coords: {
@@ -60,8 +105,11 @@ mv $wdir/$dir/512/3 $1/panoramas/$dir
           },
 
 ">> $wdir/out.txt
+fi
+fi
 done
- sed -i "428r $wdir/out.txt" $1/js/main.js
+cp $1/js/panorama_list.js $1/js/panorama_list.js_backup
+ sed -i "2r $wdir/out.txt" $1/js/panorama_list.js
 #echo Please copy out.txt into $1js/main.js
 
 rm -r $wdir
