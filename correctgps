@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 for i in `ls $1`;do
 b=$( exiftool -n -s3  -GPSPosition $1/$i)
-if [ "$b" = "0 0" ] || [ "$b" = "" ]; then
+if [ "$b" = "0 0" ] || [ -z "$b" ]; then
 echo $i >> /tmp/nogps
 exiftool -overwrite_original -gps:all= $1/$i >> /dev/null
 else
