@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 for i in `ls $1`;do
 b=$( exiftool -n -s3  -GPSPosition $1/$i)
-if [ "$b" = "0 0" ]; then
+if [ "$b" = "0 0" ] || [ "$b" = "" ]; then
 echo $i >> /tmp/nogps
 exiftool -overwrite_original -gps:all= $1/$i >> /dev/null
 else
 echo $1/$i
 fi
-done | xargs exiftool -p `dirname $0`/gpx.fmt -d %Y-%m-%dT%H:%M:%SZ > /tmp/gpscorrect.gpx
+done | xargs -s 1280000000 -L 10000000 exiftool -p `dirname $0`/gpx.fmt -d %Y-%m-%dT%H:%M:%SZ > /tmp/gpscorrect.gpx
 gpscorrelate -g /tmp/gpscorrect.gpx $1/*
