@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 for i in $@ 
-do
+do time
 	gdt=$(exiftool -s3 -GPSDateTime "$i")
 	ssec=$(echo $gdt | sed 's/.*\(.\).$/\1/')
 if [ -n "$gdt"  ]; then
